@@ -74,24 +74,33 @@ def get_num_of_files(main_dir):
     
     Returns
     -------
-    num_per_class : an array containing number of file in all sub dirs of root.
-    name_classes : name of all the sub-dirs/classes inside the root.
+    A Dictionary containing follwoing keys/info;
+    files_in_sub_dirs : an array containing number of file in all sub dirs of root.
+    sub_dirs : name of all the sub-dirs/classes inside the root.
     total_files : total number of files in all the sub-dir/classes.
     
-    '''
-    
+    '''   
     file_count = []
     for root, dirs, files in os.walk(main_dir):
         file_count.append((os.path.basename(os.path.normpath(root)), len(files)))
+    
+    if len(file_count) > 1: # if the main_dir have sub_dirs
+        file_count = file_count[1:]
         
-    file_count = file_count[1:]
+        name_classes = np.asarray(file_count)[:,0].astype(str)
+        num_per_class = np.asarray(file_count)[:,1].astype(int)
+        
+        total_files = sum(num_per_class)
+        
+        dir_prop = {'sub_dirs':name_classes, 'files_in_sub_dirs':num_per_class,
+                    'total_files':total_files}
+    else: # if the main_dir don't have sub_dirs
+        total_files = file_count[0][1]
+        
+        dir_prop = {'sub_dirs':None, 'files_in_sub_dirs':None,
+                    'total_files':total_files}
     
-    name_classes = np.asarray(file_count)[:,0].astype(str)
-    num_per_class = np.asarray(file_count)[:,1].astype(int)
-    
-    total_files = sum(num_per_class)
-    
-    return num_per_class, name_classes, total_files
+    return dir_prop
 
 
 def get_basename(full_path, include_extension=True):
