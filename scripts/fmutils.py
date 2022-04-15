@@ -286,3 +286,39 @@ def del_all_files(main_dir, confirmation=True):
         print('Operation stopped.')
     return
 
+def plot_data_dist(main_dir):
+    '''
+    Parameters
+    ----------
+    main_dir : main directory which contains all the classes
+    Returns
+    -------
+    None. just plots the data distribution graph
+
+    '''
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
+
+    mpl.rcParams['figure.dpi'] = 300
+    plt.style.use('seaborn-poster')
+    
+    file_count = []
+    for root, dirs, files in os.walk(main_dir):
+        file_count.append((os.path.basename(os.path.normpath(root)), len(files)))
+        
+    file_count = file_count[1:]
+    
+    name_classes = np.asarray(file_count)[:,0].astype(str)
+    num_class = np.asarray(file_count)[:,1].astype(int)
+    
+    x = np.arange(len(num_class))
+    
+    df = pd.DataFrame({'name of class':name_classes, 'file count of class':num_class})
+    df = df.sort_values(by=['name of class'])
+    
+    plt.figure()
+    sns.barplot(y=df['name of class'], x=df['file count of class'])
+    plt.yticks(np.arange(len(num_class)), name_classes, rotation=0, ha="right")
+    plt.xlabel('Number of Images')
+
+    return df
