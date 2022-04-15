@@ -178,16 +178,22 @@ def rename_wrt_dirname(main_dir):
     '''
     main_dir = main_dir +'/'
     x = get_all_files(main_dir)
-
+    
     for i in trange(len(x), desc="Changing names of files"):
-        path = os.path.dirname(x[i])
         ext_name = os.path.basename(x[i]).split('.')[-1]
-        new_name = os.path.dirname(x[i]).split('/')[-1] + f'_{i:03d}.' + ext_name
+        
+        new_name = os.path.dirname(os.path.normpath(x[i])).split('\\')[-1]
+        
+        new_full_path = os.path.dirname(os.path.normpath(x[i]))+'/' + \
+                        f'{new_name}_{i:03d}.' + ext_name
+    
+    
         os.rename(x[i],
-                  os.path.join(os.path.dirname(x[i]), new_name))
-    return None
+                  os.path.join(os.path.dirname(x[i]), new_full_path))
+    
+    return
 
-def file_name_replacer(main_dir, new_name, name2replace):
+def filename_replacer(main_dir, new_name, name2replace):
     '''
     Changes the names of all files inside a dir by replacing the specific strings
     in old file name with new ones, specified via 2 input lists.
