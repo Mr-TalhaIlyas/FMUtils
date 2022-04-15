@@ -187,7 +187,7 @@ def rename_wrt_dirname(main_dir):
                   os.path.join(os.path.dirname(x[i]), new_name))
     return None
 
-def file_name_replacer(data_dir, new_name, name2replace):
+def file_name_replacer(main_dir, new_name, name2replace):
     '''
     Changes the names of all files inside a dir by replacing the specific strings
     in old file name with new ones, specified via 2 input lists.
@@ -238,7 +238,7 @@ def file_name_replacer(data_dir, new_name, name2replace):
     None.
 
     '''
-    full_paths = get_all_files(data_dir + '/')
+    full_paths = get_all_files(main_dir + '/')
     
     k_name = name2replace
     e_name = new_name
