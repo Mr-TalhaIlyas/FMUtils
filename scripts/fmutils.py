@@ -292,11 +292,15 @@ def del_all_files(main_dir, confirmation=True):
         print('Operation stopped.')
     return
 
-def plot_data_dist(main_dir):
+def plot_data_dist(main_dir, sort=1):
     '''
     Parameters
     ----------
     main_dir : main directory which contains all the classes
+    sort : wether to sort the data or not
+            None: wont sort the data and the dirs will also be shown
+            1 : sorth by class name
+            2 : sort by file count
     Returns
     -------
     None. just plots the data distribution graph
@@ -304,7 +308,8 @@ def plot_data_dist(main_dir):
     '''
     import matplotlib.pyplot as plt
     import matplotlib as mpl
-
+    import pandas as pd
+    import seaborn as sns
     mpl.rcParams['figure.dpi'] = 300
     plt.style.use('seaborn-poster')
     
@@ -320,11 +325,17 @@ def plot_data_dist(main_dir):
     x = np.arange(len(num_class))
     
     df = pd.DataFrame({'name of class':name_classes, 'file count of class':num_class})
-    df = df.sort_values(by=['name of class'])
+    if sort == 1:
+        df = df.sort_values(by=['name of class'])
+        # dropping entries with 0 file counts
+        df = df[(df[['name of class','file count of class']] != 0).all(axis=1)]
+    if sort == 2:
+        df = df.sort_values(by=['file count of class'])
+        # dropping entries with 0 file counts
+        df = df[(df[['name of class','file count of class']] != 0).all(axis=1)]
     
-    plt.figure()
-    sns.barplot(y=df['name of class'], x=df['file count of class'])
-    plt.yticks(np.arange(len(num_class)), name_classes, rotation=0, ha="right")
+    sns.barplot(x='file count of class', y="name of class", data=df, order=df['name of class'])
     plt.xlabel('Number of Images')
 
     return df
+
