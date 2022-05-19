@@ -9,7 +9,7 @@ directories, files & paths management utilities. 'dfpu'
 import re, os, glob, shutil
 import numpy as np
 from tqdm import tqdm, trange
-from utils.directorytree import DirectoryTree
+
 
 numbers = re.compile(r'(\d+)')
 
@@ -142,6 +142,74 @@ def get_random_files(main_dir, count=1):
     
     return file_path
 
+
+def del_all_files(main_dir, confirmation=True):
+    '''
+    Parameters
+    ----------
+    main_dir : absolute/relative path to root directory containing all files.
+    confirmation : TYPE, optional
+        confirm before deleting the files. The default is True.
+        
+    Returns
+    -------
+    None.
+    
+    '''
+    
+    file_list = get_all_files(main_dir, sort=True)
+    if confirmation:
+        ans = input(f'do you wnat to continue deleting {len(file_list)} files? [yes[y]/no[n]] \n')
+    else:
+        ans = 'y'
+    if ans == 'y':
+        for i in file_list:
+            os.remove(i)
+        n = len(file_list)
+        print(f'{n} files deleted.')
+    else:
+        print('Operation stopped.')
+    return
+
+def split_some_data(origin_dir, dest_dir, split=0.3, move=False):
+    '''
+    Copies a portion of data to a new 'dest_dir'.
+    Parameters
+    ----------
+    origin_dir : origin dir which contains all the sub dirs having all files.
+    dest_dir : destination dir where to put the splitted data.
+    split : Float between [0, 1], percentage of data to split. The default is 0.3.
+    move : if True the selected files will be moved to the new dir (not copied.)
+    '''
+    origin_dir = origin_dir +'/'
+    dest_dir = dest_dir +'/'
+    
+    class_dirs = get_all_dirs(origin_dir)
+    
+    # making dirs in the destination dir first so we can copy/move files there.
+    dirs = os.listdir(origin_dir)
+    for i in dirs:
+        try:
+            os.mkdir(dest_dir + i)
+        except FileExistsError:
+            pass
+    class_dests = get_all_dirs(dest_dir)
+    
+    for class_dir, class_dest in tqdm(zip(class_dirs, class_dests), desc='Splitting Data', total=len(class_dirs)):
+        
+        files = get_all_files(class_dir)
+        portion = int(len(files) * split)
+        files_to_move = get_random_files(class_dir, count=portion)
+        for file in files_to_move:
+            name = os.path.basename(file)
+            if move:
+                shutil.move(file, os.path.join(class_dest, name))
+            else:
+                shutil.copy2(file, class_dest)
+    
+    return
+
+
 def rename_wrt_dirname(main_dir):
     '''
     Change the names of all files inside the main_dir wrt their sub_dir names.
@@ -193,45 +261,10 @@ def rename_wrt_dirname(main_dir):
     
     return
 
-def filename_replacer(main_dir, new_name, name2replace):
+def filename_replacer(data_dir, new_name, name2replace):
     '''
     Changes the names of all files inside a dir by replacing the specific strings
     in old file name with new ones, specified via 2 input lists.
-    e.g.
-    if:
-    new_name = [train, iris]
-    name2replace = [new_2, new_3] then, this
-    
-    ..\test_dir\
-    │
-    ├── dir1\
-    │   ├── ADE_train_00000983.jpg
-    │   ├── ADE_train_00000984.jpg
-    │   ├── ADE_train_00000994.png
-    ├── dir2\
-    │   ├── sub_dir1\
-    │   │   └── sub_sub_dir1\
-    │   │       ├── housing.csv
-    │   │       ├── iris.csv
-    │   │       ├── mnist_test_300.csv
-    │   │       └── mnist_train_3000.csv
-    
-    will change to ->
-    
-    \test_dir\
-    │
-    ├── dir1\
-    │   ├── ADE_new_2_00000983.jpg
-    │   ├── ADE_new_2_00000984.jpg
-    │   ├── ADE_new_2_00000994.png
-    ├── dir2\
-    ├── sub_dir1\
-    │   └── sub_sub_dir1\
-    │       ├── housing.csv
-    │       ├── mnist_new_2_3000.csv
-    │       ├── mnist_test_300.csv
-    │       └── new_3.csv
-    
     Note : both lists should have same length
     Parameters
     ----------
@@ -244,7 +277,7 @@ def filename_replacer(main_dir, new_name, name2replace):
     None.
 
     '''
-    full_paths = get_all_files(main_dir + '/')
+    full_paths = get_all_files(data_dir + '/')
     
     k_name = name2replace
     e_name = new_name
@@ -261,35 +294,6 @@ def filename_replacer(main_dir, new_name, name2replace):
         new_full_paths.append(os.path.join(os.path.dirname(i), name)) 
     [os.rename(full_paths[c], new_full_paths[c]) for c in range(len(full_paths))]
     
-    return None
-
-
-def del_all_files(main_dir, confirmation=True):
-    '''
-    Parameters
-    ----------
-    main_dir : absolute/relative path to root directory containing all files.
-    confirmation : TYPE, optional
-        confirm before deleting the files. The default is True.
-        
-    Returns
-    -------
-    None.
-    
-    '''
-    
-    file_list = get_all_files(main_dir, sort=True)
-    if confirmation:
-        ans = input(f'do you wnat to continue deleting {len(file_list)} files? [yes[y]/no[n]] \n')
-    else:
-        ans = 'y'
-    if ans == 'y':
-        for i in file_list:
-            os.remove(i)
-        n = len(file_list)
-        print(f'{n} files deleted.')
-    else:
-        print('Operation stopped.')
     return
 
 def plot_data_dist(main_dir, sort=1):
@@ -338,4 +342,3 @@ def plot_data_dist(main_dir, sort=1):
     plt.xlabel('Number of Images')
 
     return df
-
