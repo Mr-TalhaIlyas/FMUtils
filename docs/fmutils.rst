@@ -4,6 +4,14 @@ src.fmutils package
 Submodules
 ----------
 
+src.fmutils.fmutils module
+--------------------------
+
+.. automodule:: src.fmutils.fmutils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   
 src.fmutils.directorytree module
 --------------------------------
 
@@ -12,13 +20,6 @@ src.fmutils.directorytree module
    :undoc-members:
    :show-inheritance:
 
-src.fmutils.fmutils module
---------------------------
-
-.. automodule:: src.fmutils.fmutils
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 Module contents
 ---------------
