@@ -7,7 +7,8 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   src.fmutils
+   fmutils
+   
 
 Module contents
 ---------------
