@@ -7,7 +7,7 @@ Welcome to File Management Utils's documentation!
 =================================================
 
 .. include:: installation.rst
-.. include:: src.fmutils.rst
+.. include:: fmutils.rst
 .. include:: examples_basics.rst
    
 .. toctree::
