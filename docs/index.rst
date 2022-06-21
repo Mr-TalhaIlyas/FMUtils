@@ -11,7 +11,7 @@ Welcome to File Management Utils's documentation!
 .. include:: examples_basics.rst
    
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
 
