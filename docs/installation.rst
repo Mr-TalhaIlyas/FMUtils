@@ -20,7 +20,7 @@ Dependencies
 * os
 * pathlib
 * tqdm
-
+* seaborn
 Language
 =========
 
