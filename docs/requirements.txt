@@ -11,3 +11,5 @@ sphinxcontrib-serializinghtml==1.1.5
 Jinja2==3.0.3
 numpy
 tqdm
+matplotlib
+pandas
