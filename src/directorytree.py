@@ -1,7 +1,7 @@
 import os
 import pathlib
 import sys
-from fmutils.fmutils import get_all_dirs
+from fmutils import get_all_dirs
 PIPE = "│"
 ELBOW = "└──"
 TEE = "├──"
