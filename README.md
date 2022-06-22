@@ -3,6 +3,9 @@
 # FMUtils
 File Management Utilities, for easily accessing and managing large number of files and dirs in ML datasets.
 
+## Documentation
+ 
+Read the docs [here](https://files-management-utilities.readthedocs.io/en/latest/)
 
 ## Usage
 
@@ -69,6 +72,7 @@ from fmutils import fmutils as fmu
 
 d_list = fmu.get_all_dirs(main_dir = 'C:/Users/talha/Downloads/test_dir', sort=True)
 
+
 print(d_list)
 ```
 
@@ -91,4 +95,8 @@ Now we will use the `sphinx-apidoc` command to generate the documantation of our
 $ sphinx-apidoc -o docs src/
 
 ```
+
+
+Ref:
+[YouTube](https://www.youtube.com/watch?v=5s3JvVqwESA&list=LL&index=1&ab_channel=SoumilShah)
 
