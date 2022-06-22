@@ -226,33 +226,6 @@ def split_some_data(origin_dir, dest_dir, split=0.3, move=False):
     
     return
 
-def clone_dir_tree(source_dir, dest_dir):
-    '''
-    
-    Parameters
-    ----------
-    source_dir : string/path
-        dir form which to clone the dir tree.
-    dest_dir : string/path
-        base dir location where the new dir tree will be cloned
-    
-    Returns
-    -------
-    None. Creates the directories at new location without copying files
-    '''
-    x = get_all_dirs(source_dir)
-    
-    dirs = []
-    [dirs.append(x[j].split('/')[-1]) for j in range(len(x))]
-    
-    for i in dirs:
-        try:
-            os.mkdir(dest_dir + i)
-        except FileExistsError:
-            pass
-    print(f'Cloned {len(x)} directories and sub-directories in total.')
-    return
-
 
 def file_name_replacer(main_dir, new_name, name2replace):
     '''
