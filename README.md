@@ -71,3 +71,24 @@ d_list = fmu.get_all_dirs(main_dir = 'C:/Users/talha/Downloads/test_dir', sort=T
 
 print(d_list)
 ```
+
+## Sphinx
+```
+$ sphinx-quickstart
+```
+Then enter the project name, author name, version, language etc. and Enter.
+
+Then generate `html` so that you get the file structure 
+```
+$ make html
+// from removing everytin in build
+$ make clean html
+```
+your generate `index.html` will be in `docs/html` dir.
+
+Now we will use the `sphinx-apidoc` command to generate the documantation of our `src` model and put the generated files in `docs` folder.
+```
+$ sphinx-apidoc -o docs src/
+
+```
+
