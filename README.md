@@ -1,4 +1,5 @@
-[![Documentation Status](https://readthedocs.org/projects/files-management-utilities/badge/?version=latest)](https://files-management-utilities.readthedocs.io/en/latest/?badge=latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+ [![Generic badge](https://img.shields.io/badge/Version-0.2.0-red.svg)](https://shields.io/) [![Downloads](https://pepy.tech/badge/fmutils)](https://pepy.tech/project/fmutils) [![Documentation Status](https://readthedocs.org/projects/files-management-utilities/badge/?version=latest)](https://files-management-utilities.readthedocs.io/en/latest/?badge=latest) 
 
 # FMUtils
 File Management Utilities, for easily accessing and managing large number of files and dirs in ML datasets.
