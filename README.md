@@ -3,7 +3,11 @@
 
 # FMUtils
 File Management Utilities, for easily accessing and managing large number of files and dirs in ML datasets.
-
+## Installation
+Install via [pypi](https://pypi.org/project/fmutils/)
+```
+pip install fmutils
+```
 ## Documentation
  
 Read the docs [here](https://files-management-utilities.readthedocs.io/en/latest/)
