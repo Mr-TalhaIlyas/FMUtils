@@ -243,8 +243,8 @@ def file_name_replacer(main_dir, new_name, name2replace):
     -------
     None.
 
-    Note
-    -------
+    Information
+    -------------
     Changes the names of all files inside a dir by replacing the specific strings
     in old file name with new ones, specified via 2 input lists.
     Both lists should have same length
@@ -318,8 +318,8 @@ def move_matching_files(path2copy, path2match, path2paste):
     -------
     None.
     
-    Note
-    -------
+    Information
+    ------------
     Example use case might be in your ML training data you have labels in one dir and
     images in one dir but you deleted some blurred/damages images and now you only want 
     to keep labels that have their corresponding images.
