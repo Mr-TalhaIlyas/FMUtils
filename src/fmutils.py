@@ -226,6 +226,117 @@ def split_some_data(origin_dir, dest_dir, split=0.3, move=False):
     
     return
 
+def tvt_split(img_dir, dest_dir, lbl_dir=None, test_split=0.2, val_split=0.1, mode='copy'):
+    '''
+    Parameters
+    ----------
+    img_dir : string/path
+            absolute/relative path to root directory containing all files.
+    dest_dir : string/path
+            absolute/relative path to root directory containing all files..
+    lbl_dir : TYPE
+        DESCRIPTION.
+    test_split : float beween [0, 1], optional
+            Percentage of test split. The default is 0.2.
+    val_split : TYPE, optional
+        Percentage of validation split. The default is 0.1.
+    mode : string, optional One of ['copy', 'move']
+        Whether to copy the data or move it. The default is 'copy'.
+
+    Returns
+    -------
+    None.
+    
+    Note
+    -------
+    Create Train-Validation-Test splits of the data for ML models. in follwoing format
+    Added in version==0.2.1 and `split_some_data` is removed.
+    ../split/
+    │
+    ├── test\
+    │   └── images\
+    │       ├── class_1\
+    │       │
+    │       ├── class_2\
+    ├── train\
+    │   └── images\
+    │       ├── class_1\
+    │       │
+    │       ├── class_2\
+    └── val\
+        └── images\
+            ├── class_1\
+            │
+            ├── class_2\
+    
+    '''
+    test_data = test_split
+    val_data = val_split
+
+    mode = mode
+
+    img_paths = get_all_files(img_dir)
+    if lbl_dir != None:
+        mask_paths = get_all_files(lbl_dir)
+     
+    
+    if lbl_dir == None:
+        x_train_val, x_test = train_test_split(img_paths, test_size=test_data, random_state=42)
+    
+        x_train, x_val = train_test_split(x_train_val, test_size=val_data, random_state=42)
+    else:
+        x_train_val, x_test, y_train_val, y_test = train_test_split(img_paths, mask_paths,
+                                                                    test_size=test_data, random_state=42)
+        
+        x_train, x_val, y_train, y_val = train_test_split(x_train_val, y_train_val,
+                                                                    test_size=val_data, random_state=42)
+    
+    x = len(img_paths)
+    print(f'{30*"*"} \n Total {x} images found. \n\
+          Train Data = {len(x_train)} \n\
+          Test Data = {len(x_test)} \n\
+          Val Data = {len(x_val)}\n{30*"*"}')
+          
+    img_data = [x_train, x_test, x_val]
+    if lbl_dir != None:
+        label_data = [y_train, y_test, y_val]
+    
+    sub_dir = ['train', 'test', 'val']
+    
+    for i in sub_dir:
+            try:
+                os.mkdir(dest_dir + i)
+                os.mkdir(dest_dir + i + '/images/')
+                clone_dir_tree(img_dir, dest_dir + i + '/images/')
+                if lbl_dir != None:
+                    os.mkdir(dest_dir + i + '/lbls/')
+                    clone_dir_tree(img_dir, dest_dir + i + '/images/')
+            except FileExistsError:
+                pass
+            
+    for i in range(len(sub_dir)):
+        im_path = os.path.join(dest_dir, sub_dir[i] + '/images/')
+        if lbl_dir != None:
+            ms_path = os.path.join(dest_dir, sub_dir[i] + '/lbls/')
+        
+        if lbl_dir != None:
+            for j,k in tqdm(zip(img_data[i],label_data[i]), desc=f'Creating {sub_dir[i]} set', total=len(img_data[i])):
+                if mode == 'copy':
+                    shutil.copy2(j, im_path)
+                    if lbl_dir != None:
+                        shutil.copy2(k, ms_path)
+                if mode == 'move':
+                    shutil.move(j, im_path)
+                    if lbl_dir != None:
+                        shutil.move(k, ms_path)
+        else:
+            for j in tqdm(img_data[i], desc=f'Creating {sub_dir[i]} set', total=len(img_data[i])):
+                if mode == 'copy':
+                    shutil.copy2(j, im_path)
+                if mode == 'move':
+                    shutil.move(os.path.normpath(j), os.path.normpath(im_path))
+    
+    return None
 
 def file_name_replacer(main_dir, new_name, name2replace):
     '''
@@ -358,4 +469,20 @@ def move_matching_files(path2copy, path2match, path2paste):
         shutil.copy2(all_filelist[k], path2paste)
     return None
 
+def remove_empty_dirs(main_dir):
+    '''
+    
+    Parameters
+    ----------
+    main_dir : string/path
+         Absolute path to directory from where you want to remove all the empty directories.
 
+    Returns
+    -------
+    None.
+    '''
+    walk = list(os.walk(main_dir))
+    for path, _, _ in walk[::-1]:
+        if len(os.listdir(path)) == 0:
+            os.rmdir(path)
+    return None
