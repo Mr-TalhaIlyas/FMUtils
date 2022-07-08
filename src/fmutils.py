@@ -181,50 +181,6 @@ def del_all_files(main_dir, confirmation=True):
         print('Operation stopped.')
     return
 
-def split_some_data(origin_dir, dest_dir, split=0.3, move=False):
-    '''
-    Note
-    ----------
-    Copies a portion of data to a new 'dest_dir'.
-    
-    Parameters
-    ----------
-    origin_dir : origin dir which contains all the sub dirs having all files.
-    dest_dir : destination dir where to put the splitted data.
-    split : Float between [0, 1], percentage of data to split. The default is 0.3.
-    move : if True the selected files will be moved to the new dir (not copied.)
-    
-    Returns
-    -------
-    None. 
-    '''
-    origin_dir = origin_dir +'/'
-    dest_dir = dest_dir +'/'
-    
-    class_dirs = get_all_dirs(origin_dir)
-    
-    # making dirs in the destination dir first so we can copy/move files there.
-    dirs = os.listdir(origin_dir)
-    for i in dirs:
-        try:
-            os.mkdir(dest_dir + i)
-        except FileExistsError:
-            pass
-    class_dests = get_all_dirs(dest_dir)
-    
-    for class_dir, class_dest in tqdm(zip(class_dirs, class_dests), desc='Splitting Data', total=len(class_dirs)):
-        
-        files = get_all_files(class_dir)
-        portion = int(len(files) * split)
-        files_to_move = get_random_files(class_dir, count=portion)
-        for file in files_to_move:
-            name = os.path.basename(file)
-            if move:
-                shutil.move(file, os.path.join(class_dest, name))
-            else:
-                shutil.copy2(file, class_dest)
-    
-    return
 
 def tvt_split(img_dir, dest_dir, lbl_dir=None, test_split=0.2, val_split=0.1, mode='copy'):
     '''
@@ -250,24 +206,24 @@ def tvt_split(img_dir, dest_dir, lbl_dir=None, test_split=0.2, val_split=0.1, mo
     Note
     -------
     Create Train-Validation-Test splits of the data for ML models. in follwoing format
-    Added in version==0.2.1 and `split_some_data` is removed.
-    ../split/
-    │
-    ├── test\
-    │   └── images\
-    │       ├── class_1\
-    │       │
-    │       ├── class_2\
-    ├── train\
-    │   └── images\
-    │       ├── class_1\
-    │       │
-    │       ├── class_2\
-    └── val\
-        └── images\
-            ├── class_1\
-            │
-            ├── class_2\
+    Added in version==0.2.1 and `split_some_data` is removed. ::
+                ../split/
+                │
+                ├── test\
+                │   └── images\
+                │       ├── class_1\
+                │       │
+                │       ├── class_2\
+                ├── train\
+                │   └── images\
+                │       ├── class_1\
+                │       │
+                │       ├── class_2\
+                └── val\
+                    └── images\
+                        ├── class_1\
+                        │
+                        ├── class_2\
     
     '''
     test_data = test_split
