@@ -206,31 +206,31 @@ def tvt_split(img_dir, dest_dir, lbl_dir=None, test_split=0.2, val_split=0.1, mo
     Note
     -------
     Create Train-Validation-Test splits of the data for ML models. in follwoing format
-    Added in version==0.2.1 and `split_some_data` is removed. ::
-                ../split/
-                │
-                ├── test\
-                │   └── images\
-                │       ├── class_1\
-                │       │
-                │       ├── class_2\
-                ├── train\
-                │   └── images\
-                │       ├── class_1\
-                │       │
-                │       ├── class_2\
-                └── val\
-                    └── images\
-                        ├── class_1\
-                        │
-                        ├── class_2\
     
+    ../split/
+    │
+    ├── test\
+    │   └── images\
+    │       ├── class_1\
+    │       │
+    │       ├── class_2\
+    ├── train\
+    │   └── images\
+    │       ├── class_1\
+    │       │
+    │       ├── class_2\
+    └── val\
+        └── images\
+            ├── class_1\
+            │
+            ├── class_2\
+
     '''
     test_data = test_split
     val_data = val_split
-
+    
     mode = mode
-
+    
     img_paths = get_all_files(img_dir)
     if lbl_dir != None:
         mask_paths = get_all_files(lbl_dir)
@@ -266,7 +266,7 @@ def tvt_split(img_dir, dest_dir, lbl_dir=None, test_split=0.2, val_split=0.1, mo
                 clone_dir_tree(img_dir, dest_dir + i + '/images/')
                 if lbl_dir != None:
                     os.mkdir(dest_dir + i + '/lbls/')
-                    clone_dir_tree(img_dir, dest_dir + i + '/images/')
+                    clone_dir_tree(img_dir, dest_dir + i + '/lbls/')
             except FileExistsError:
                 pass
             
@@ -277,22 +277,33 @@ def tvt_split(img_dir, dest_dir, lbl_dir=None, test_split=0.2, val_split=0.1, mo
         
         if lbl_dir != None:
             for j,k in tqdm(zip(img_data[i],label_data[i]), desc=f'Creating {sub_dir[i]} set', total=len(img_data[i])):
+                
+                cls_dir = os.path.dirname(j).split('/')[-1]
+                if cls_dir != os.path.dirname(img_dir).split('/')[-1]:
+                    final_img_path = os.path.join(im_path, cls_dir)
+                    if lbl_dir != None:
+                        final_mask_path = os.path.join(ms_path, cls_dir)
+                        
                 if mode == 'copy':
-                    shutil.copy2(j, im_path)
-                    if lbl_dir != None:
-                        shutil.copy2(k, ms_path)
+                    shutil.copy2(j, final_img_path)
+                    shutil.copy2(k, final_mask_path)
                 if mode == 'move':
-                    shutil.move(j, im_path)
-                    if lbl_dir != None:
-                        shutil.move(k, ms_path)
+                    shutil.move(os.path.normpath(j), os.path.normpath(final_img_path))
+                    shutil.move(os.path.normpath(k), os.path.normpath(final_mask_path))
         else:
             for j in tqdm(img_data[i], desc=f'Creating {sub_dir[i]} set', total=len(img_data[i])):
+                
+                cls_dir = os.path.dirname(j).split('/')[-1]
+                if cls_dir != os.path.dirname(img_dir).split('/')[-1]:
+                    final_img_path = os.path.join(im_path, cls_dir)
+                    if lbl_dir != None:
+                        final_mask_path = os.path.join(ms_path, cls_dir)
+                        
                 if mode == 'copy':
-                    shutil.copy2(j, im_path)
+                    shutil.copy2(j, final_img_path)
                 if mode == 'move':
-                    shutil.move(os.path.normpath(j), os.path.normpath(im_path))
+                    shutil.move(os.path.normpath(j), os.path.normpath(final_img_path))
     
-    return None
 
 def file_name_replacer(main_dir, new_name, name2replace):
     '''
