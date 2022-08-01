@@ -5,7 +5,9 @@ Examples:
 A standard use case for DirectoryTree Generator
 ------------------------------------------------
 
-The following example shows a standard use case. :: python
+The following example shows a standard use case. 
+
+.. code-block:: python
 
     from fmutils import directorytree as fdt
 
@@ -21,7 +23,9 @@ The following example shows a standard use case. :: python
 A Use case for getting the list of dirs
 -----------------------------------------
 
-The following example shows a simple example to get the list of all the sub-dirs in the root dir. :: python
+The following example shows a simple example to get the list of all the sub-dirs in the root dir.
+
+.. code-block:: python
 
     from fmutils import fmutils as fmu
 
@@ -31,7 +35,9 @@ The following example shows a simple example to get the list of all the sub-dirs
 
 Plotting Data Dist
 -------------------
-The following example shows a simple example to get the bar plot of files present inside the root dir. :: python
+The following example shows a simple example to get the bar plot of files present inside the root dir.
+
+.. code-block:: python
 
     from fmutils import plottingutils as fpu
 
@@ -39,7 +45,9 @@ The following example shows a simple example to get the bar plot of files presen
     
 Train Validation Test Split
 ----------------------------
-The following example shows a simple example to get the bar plot of files present inside the root dir. :: python
+The following example shows a simple example to get the bar plot of files present inside the root dir. 
+
+.. code-block:: python
 
     from fmutils import fmutils as fmu
 
