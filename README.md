@@ -8,6 +8,10 @@ Install via [pypi](https://pypi.org/project/fmutils/)
 ```
 pip install fmutils
 ```
+Ignoring dependencies
+```
+pip install --no-deps fmutils
+```
 ## Documentation
  
 Read the docs [here](https://files-management-utilities.readthedocs.io/en/latest/)
