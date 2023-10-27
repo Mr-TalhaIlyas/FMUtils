@@ -5,7 +5,7 @@ import matplotlib as mpl
 import pandas as pd
 import seaborn as sns
 mpl.rcParams['figure.dpi'] = 300
-plt.style.use('seaborn-poster')
+
 
 
 def plot_data_dist(main_dir, sort=1):
