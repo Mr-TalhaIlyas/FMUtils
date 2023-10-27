@@ -12,6 +12,4 @@ Jinja2==3.0.3
 numpy
 tqdm
 matplotlib
-pandas
-seaborn
 scikit-learn
