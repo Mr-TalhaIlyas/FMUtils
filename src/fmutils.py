@@ -1,5 +1,6 @@
 import re, os, shutil
 import numpy as np
+from pathlib import Path
 from tqdm import tqdm, trange
 import pathlib
 
@@ -103,15 +104,12 @@ def get_num_of_files(main_dir):
     
     return dir_prop
 
-
-def get_basename(full_path, include_extension=True):
+def get_basename(full_path):
     '''
     Parameters
     ----------
     full_path :  string/path
         Absolute path to the file.
-    include_extension : Bool, optional
-        Whether to include the file extension or not. The default is True.
 
     Returns
     -------
@@ -119,10 +117,37 @@ def get_basename(full_path, include_extension=True):
         basename of the file.
 
     '''
-    name = os.path.basename(os.path.normpath(full_path))
-    if include_extension== False:
-        name = name.split('.')[0]
-    return name
+    return Path(full_path).stem
+
+def get_suffix(full_path):
+    '''
+    Parameters
+    ----------
+    full_path :  string/path
+        Absolute path to the file.
+
+    Returns
+    -------
+    name : string
+        extension of that file.
+
+    '''
+    return Path(full_path).suffix
+
+def get_pdir(full_path):
+    '''
+    Parameters
+    ----------
+    full_path :  string/path
+        Absolute path to the file.
+
+    Returns
+    -------
+    name : string
+        parent dir/sub-dir containing file.
+
+    '''
+    return Path(full_path).parent.name
 
 
 def get_random_files(main_dir, count=1):
